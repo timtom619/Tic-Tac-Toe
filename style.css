@@ -1,0 +1,12 @@
+.game-board-container{
+  display: flex;
+  flex-wrap: wrap;
+  width: 600px;
+  height: 600px;
+  margin: 0 auto;
+}
+
+.square{
+  width: 200px;
+  height: 200px;
+}

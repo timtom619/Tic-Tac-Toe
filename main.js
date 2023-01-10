@@ -19,12 +19,12 @@ const GameBoard = (() => {
 // Player should have:
 // name, choice 'x' or 'o'
 const player = (name, choice) => {
-  
   return{ name, choice,}
 }
 
 // Object to store the flow of the game
 const displayController = (() => {
+  let counter = 1;
   const updatedBoard = (position, choice) => {
     gameBoard.splice(position, 0, choice);
     return gameBoard;
