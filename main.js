@@ -11,22 +11,9 @@ const GameBoard = (() => {
   };
 })();
 
-// Player should have:
-// name, choice 'x' or 'o'
-const player = (choice) => {
-  return {choice}
-}
 
 // Object to store the flow of the game
 const displayController = (() => {
-  return {
-    // getChoice: () => choice,
-    // setChoice: (value) => choice = value
-  }
-})
-
-// When user clicks on box
-   // add a event listener on each square
 const squares = document.querySelectorAll('.square');
 squares.forEach((square) => {
   square.addEventListener('click', updateValue);
@@ -34,18 +21,42 @@ squares.forEach((square) => {
 
 // Should have a way of knowing if player is X or O
 const btnX = document.querySelector('.btn.x');
+const btnO = document.querySelector('.btn.o');
 let playerOne;
+
 btnX.addEventListener('click', (event) => {
   playerOne = player(event.target.innerText);
-  console.log(playerOne.choice);
 });
+btnO.addEventListener('click', (event) => {
+  playerOne = player(event.target.innerText);
+});
+
 // then add the players value into that position
 function updateValue(event) {
-  if(playerOne) {
-    event.target.innerText = playerOne.choice;
+  // Check for win condition
+
+  // Did player select a choice and is the square empty
+  // event.target = <div class="square [target]"></div>
+  if(playerOne && !(event.target.hasChildNodes())) {
+    const span = document.createElement('span');
+    span.innerText = playerOne.choice;
+    event.target.appendChild(span);
   }
 }
+  return {
+    // getChoice: () => choice,
+    // setChoice: (value) => choice = value
+  }
+})
 
-// const children = document.getElementsByTagName('span');
-// children[0].innerHTML = 'H';
-// console.log(children[0].innerHTML);
+const start = (() => {
+  displayController();
+})();
+
+// Player should have:
+// name, choice 'x' or 'o'
+const player = (choice) => {
+  return {choice}
+}
+
+document.querySelector('.btn-start').addEventListener('click', start);
