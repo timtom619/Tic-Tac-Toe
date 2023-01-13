@@ -33,14 +33,32 @@ btnO.addEventListener('click', (event) => {
 
 // then add the players value into that position
 function updateValue(event) {
-  // Check for win condition
-
   // Did player select a choice and is the square empty
   // event.target = <div class="square [target]"></div>
+  // need to grab position and update it on Gameboard
+  const boardPosition = event.target.classList.item(1);
+  console.log(boardPosition);
   if(playerOne && !(event.target.hasChildNodes())) {
     const span = document.createElement('span');
     span.innerText = playerOne.choice;
     event.target.appendChild(span);
+
+    //update GameBoard
+    GameBoard.setBoard(boardPosition, playerOne.choice);
+    console.log(GameBoard.getBoard());
+
+    //check win condition
+// win conditions:
+// 0,1,2
+// 3,4,5
+// 6,7,8
+// 0,3,6
+// 0,4,8
+// 1,4,7
+// 2,5,8
+// 2,4,6
+// if no matches above and all squares filled = tie
+//get the board
   }
 }
   return {
