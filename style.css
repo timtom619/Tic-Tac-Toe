@@ -22,7 +22,7 @@ h1{
   margin: auto;
 }
 
-.btn-container{
+.btn-container, .result-container{
   display: flex;
   justify-content: center;
   align-items: center;

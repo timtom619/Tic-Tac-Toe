@@ -54,7 +54,6 @@ function updateValue(event) {
   // event.target = <div class="square [target position]"></div>
   // need to grab position and update it on Gameboard
   const boardPosition = event.target.classList.item(1);
-  // console.log(boardPosition);
   if(playerOne && !(event.target.hasChildNodes()) && turn <= 4) {
     const span = document.createElement('span');
     span.innerText = playerOne.choice;
@@ -86,12 +85,15 @@ function updateValue(event) {
     const children = gameBoardContainer.children;
     const randomNumber = emptyIndexes[getRandomPosition(emptyIndexesLength)].toString();
     const computerSquare = children.namedItem(randomNumber);
-    console.log(emptyIndexes);
+    let computerBoardPosition = computerSquare.classList.item(1);
+    console.log(computerSquare);
+    console.log(computerBoardPosition);
     console.log(children.namedItem(randomNumber));
-    
+
     // If computer square is not filled
     if(!(computerSquare.hasChildNodes())) {
       computerSquare.appendChild(opponentSpan);
+      GameBoard.setBoard(computerBoardPosition, computer.choice);
     } else if(turn < 4){
       function searchVacantSquare() {
         let randNumber = emptyIndexes[getRandomPosition(emptyIndexesLength)].toString();
@@ -100,6 +102,7 @@ function updateValue(event) {
         console.log(newSquare);
         // Base case: Finding square that is fillable
         if(!(newSquare.hasChildNodes())) {
+          GameBoard.setBoard(computerBoardPosition, computer.choice);
           return newSquare.appendChild(opponentSpan);
         } else {
             // Recursive case: keep finding random available squares
@@ -108,20 +111,37 @@ function updateValue(event) {
       }
       searchVacantSquare();
     }
-    
-// account for last square it should just be x 
     //check win condition
-// win conditions:
-// 0,1,2
-// 3,4,5
-// 6,7,8
-// 0,3,6
-// 0,4,8
-// 1,4,7
-// 2,5,8
-// 2,4,6
+    const winCondition = {
+      'win1' : [0,1,2],
+      'win2' : [3,4,5],
+      'win3' : [6,7,8],
+      'win4' : [0,3,6],
+      'win5' : [0,4,8],
+      'win6' : [1,4,7],
+      'win7' : [2,5,8],
+      'win8' : [2,4,6],
+    }
+    // console.log(GameBoard.getBoardAtPosition(0));
+    // console.log(GameBoard.getBoard());
+    let board = GameBoard.getBoard();
+    console.log(board.at(winCondition['win1'][0]) === 'X');
+    for(const key in winCondition) {
+      if(board.at(winCondition[key][0]) === 'X' && 
+         board.at(winCondition[key][1]) === 'X' &&
+         board.at(winCondition[key][2]) === 'X') {
+          console.log('you win');
+      } 
+      if(board.at(winCondition[key][0]) === 'O' && 
+         board.at(winCondition[key][1]) === 'O' &&
+         board.at(winCondition[key][2]) === 'O') {
+          console.log('computer wins');
+      }
+    }
 // if no matches above and all squares filled = tie
 //get the board
+   
+    console.log('Tie');
     turn++;
   }
 }
@@ -142,3 +162,4 @@ const player = (choice) => {
 }
 
 document.querySelector('.btn-start').addEventListener('click', start);
+
