@@ -1,4 +1,4 @@
-//starting game board
+// Starting game board
 const GameBoard = (() => {
   const gameBoard = new Array(9);
   return { 
@@ -14,13 +14,6 @@ const GameBoard = (() => {
   };
 })();
 
-let count = 0;
-GameBoard.getBoard().forEach((element) => {
-  console.log(element);
-  // if(element) count++;
-  // return count;
-});
-
 // Object to store the flow of the game
 const displayController = (() => {
 const squares = document.querySelectorAll('.square');
@@ -32,7 +25,7 @@ const player = (choice) => {
   return {choice}
 }
 
-// Should have a way of knowing if player is X or O
+// Store Player and Computer Selection
 const btnX = document.querySelector('.btn.x');
 const btnO = document.querySelector('.btn.o');
 let playerOne;
@@ -47,10 +40,8 @@ btnO.addEventListener('click', (event) => {
   computer = player('X');
 });
 
-// then add the players value into that position
 let turn = 0;
 function updateValue(event) {
-  console.log(turn);
   function getRandomPosition(max) {
     return Math.floor(Math.random() * max);
   }
@@ -69,7 +60,7 @@ function updateValue(event) {
     // AI Random move logic:
     // grab new list of available squares 
       // loop through current gameBoard
-      // Check every index that is empty and store it in new Array (keep track of the index and length)
+      // Check every index that is empty and store it in new Array
       let emptyIndexes = [];
       const gameBoardLength = GameBoard.getBoard().length;
       for(let i = 0; i < gameBoardLength; i++) {
@@ -77,44 +68,43 @@ function updateValue(event) {
           emptyIndexes.push(i);
         }
       }
-  
-    // randomize selection based on the new Array
-    // enter computer selection
-    // update GameBoard
+    
     const gameBoardContainer = document.querySelector('.game-board-container');
-    const emptyIndexesLength = emptyIndexes.length;
+    const emptyIndexesLength = (emptyIndexes.length) - 1;
     const opponentSpan = document.createElement('span');
     opponentSpan.innerText = computer.choice;
   
     const children = gameBoardContainer.children;
-    const randomNumber = emptyIndexes[getRandomPosition(emptyIndexesLength)].toString();
+    let randomNumber;
+    if(emptyIndexes.length >= 2) {
+      randomNumber = emptyIndexes[getRandomPosition(emptyIndexesLength)].toString();
+    }
     const computerSquare = children.namedItem(randomNumber);
-    let computerBoardPosition = computerSquare.classList.item(1);
-    console.log(computerSquare);
-    console.log(computerBoardPosition);
-    console.log(children.namedItem(randomNumber));
+    if(computerSquare !== null) {
+      let computerBoardPosition = computerSquare.classList.item(1);
 
     // If computer square is not filled
-    if(!(computerSquare.hasChildNodes())) {
-      computerSquare.appendChild(opponentSpan);
-      GameBoard.setBoard(computerBoardPosition, computer.choice);
-    } else if(turn < 4){
-      function searchVacantSquare() {
-        let randNumber = emptyIndexes[getRandomPosition(emptyIndexesLength)].toString();
-        let newSquare = children.namedItem(randNumber);
-        console.log(randNumber);
-        console.log(newSquare);
-        // Base case: Finding square that is fillable
-        if(!(newSquare.hasChildNodes())) {
-          GameBoard.setBoard(computerBoardPosition, computer.choice);
-          return newSquare.appendChild(opponentSpan);
-        } else {
-            // Recursive case: keep finding random available squares
-            return searchVacantSquare();
+      if(!(computerSquare.hasChildNodes())) {
+        computerSquare.appendChild(opponentSpan);
+        GameBoard.setBoard(computerBoardPosition, computer.choice);
+      } else if(turn < 4){
+          function searchVacantSquare() {
+            let randNumber = emptyIndexes[getRandomPosition(emptyIndexesLength)].toString();
+            let newSquare = children.namedItem(randNumber);
+
+          // Base case: Finding square that is fillable
+          if(!(newSquare.hasChildNodes())) {
+            GameBoard.setBoard(computerBoardPosition, computer.choice);
+            return newSquare.appendChild(opponentSpan);
+          } else {
+              // Recursive case: keep finding random available squares
+              return searchVacantSquare();
+            }
+          }
+          searchVacantSquare();
         }
-      }
-      searchVacantSquare();
     }
+    
     //check win condition
     const winCondition = {
       'win1' : [0,1,2],
@@ -126,37 +116,32 @@ function updateValue(event) {
       'win7' : [2,5,8],
       'win8' : [2,4,6],
     }
-    // console.log(GameBoard.getBoardAtPosition(0));
-    // console.log(GameBoard.getBoard());
+  
     let board = GameBoard.getBoard();
-    console.log(board.at(winCondition['win1'][0]) === 'X');
+    let result = document.querySelector('.result-container');
     for(const key in winCondition) {
       if(board.at(winCondition[key][0]) === 'X' && 
          board.at(winCondition[key][1]) === 'X' &&
          board.at(winCondition[key][2]) === 'X') {
           
-          playerOne.choice === 'X' ? console.log('you win') : console.log('computer wins');
+          playerOne.choice === 'X' ? result.innerText = 'you win' : result.innerText = 'computer wins';
           
       } 
       if(board.at(winCondition[key][0]) === 'O' && 
          board.at(winCondition[key][1]) === 'O' &&
          board.at(winCondition[key][2]) === 'O') {
           
-          playerOne.choice === 'O' ? console.log('you win') : console.log('computer wins');
+          playerOne.choice === 'O' ? result.innerText = 'you win' : result.innerText = 'computer wins';
 
       }
     }
-// if no matches above and all squares filled = tie
-//get the board
-   
-    console.log('Tie');
-    turn++;
+      // if no matches above and all squares filled = tie
+      if(emptyIndexes.length === 0) {
+        console.log('tie');
+      }
+        turn++;
   }
 }
-  return {
-    // getChoice: () => choice,
-    // setChoice: (value) => choice = value
-  }
 })
 
 const start = (() => {
