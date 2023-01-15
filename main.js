@@ -28,6 +28,10 @@ squares.forEach((square) => {
   square.addEventListener('click', updateValue);
 });
 
+const player = (choice) => {
+  return {choice}
+}
+
 // Should have a way of knowing if player is X or O
 const btnX = document.querySelector('.btn.x');
 const btnO = document.querySelector('.btn.o');
@@ -130,12 +134,16 @@ function updateValue(event) {
       if(board.at(winCondition[key][0]) === 'X' && 
          board.at(winCondition[key][1]) === 'X' &&
          board.at(winCondition[key][2]) === 'X') {
-          console.log('you win');
+          
+          playerOne.choice === 'X' ? console.log('you win') : console.log('computer wins');
+          
       } 
       if(board.at(winCondition[key][0]) === 'O' && 
          board.at(winCondition[key][1]) === 'O' &&
          board.at(winCondition[key][2]) === 'O') {
-          console.log('computer wins');
+          
+          playerOne.choice === 'O' ? console.log('you win') : console.log('computer wins');
+
       }
     }
 // if no matches above and all squares filled = tie
@@ -155,11 +163,6 @@ const start = (() => {
   displayController();
 })();
 
-// Player should have:
-// name, choice 'x' or 'o'
-const player = (choice) => {
-  return {choice}
-}
 
 document.querySelector('.btn-start').addEventListener('click', start);
 
