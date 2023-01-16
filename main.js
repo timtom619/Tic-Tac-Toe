@@ -119,12 +119,14 @@ function updateValue(event) {
   
     let board = GameBoard.getBoard();
     let result = document.querySelector('.result-container');
+    let hasWinner = false;
     for(const key in winCondition) {
       if(board.at(winCondition[key][0]) === 'X' && 
          board.at(winCondition[key][1]) === 'X' &&
          board.at(winCondition[key][2]) === 'X') {
           
           playerOne.choice === 'X' ? result.innerText = 'you win' : result.innerText = 'computer wins';
+          hasWinner = true;
           
       } 
       if(board.at(winCondition[key][0]) === 'O' && 
@@ -132,11 +134,12 @@ function updateValue(event) {
          board.at(winCondition[key][2]) === 'O') {
           
           playerOne.choice === 'O' ? result.innerText = 'you win' : result.innerText = 'computer wins';
+          hasWinner = true;
 
       }
     }
       // if no matches above and all squares filled = tie
-      if(emptyIndexes.length === 0) {
+      if(emptyIndexes.length === 0 && !hasWinner ) {
         console.log('tie');
       }
         turn++;
@@ -144,10 +147,15 @@ function updateValue(event) {
 }
 })
 
+// Start game
 const start = (() => {
   displayController();
 })();
 
+// Reset Game
+// Clear out the board
 
 document.querySelector('.btn-start').addEventListener('click', start);
+
+
 
